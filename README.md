@@ -1,4 +1,4 @@
-# CP
+# Check Point assignment - Maor Rocky
 
 ## MongoDB schemas:
 
