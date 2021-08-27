@@ -6,9 +6,12 @@ export const createPost = async (req, res) => {
     res.status(400).send({ message: 'Post is empty', success: false });
   }
 
+  const { title, text, name } = req.body;
+
   const post = new Post({
-    title: req.body.title,
-    text: req.body.text,
+    title,
+    text,
+    name,
   });
   let data;
   try {
@@ -92,6 +95,24 @@ export const updatePostByID = async (req, res) => {
       },
       { new: true }
     );
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'something went wrong', success: false });
+  }
+
+  res.send({ data, success: true });
+};
+
+export const getTrendingPosts = async (req, res) => {
+  let data;
+  try {
+    data = await Post.find();
+    data.sort((a, b) => {
+      if (a.likes === b.likes) {
+        return b.createdAt - a.createdAt;
+      }
+      return b.likes - a.likes;
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'something went wrong', success: false });
