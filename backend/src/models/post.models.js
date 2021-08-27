@@ -20,10 +20,12 @@ const PostSchema = mongoose.Schema(
     text: {
       type: String,
       required: true,
+      maxLength: [500, 'minLength of title is 30'],
     },
     name: {
       type: String,
       required: true,
+      
     },
     likes: LikesSchema,
   },
