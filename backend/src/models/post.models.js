@@ -1,5 +1,14 @@
 import mongoose from 'mongoose';
 
+const LikesSchema = mongoose.Schema({
+  likersArray: {
+    type: [String],
+  },
+  likesCount: {
+    type: Number,
+  },
+});
+
 const PostSchema = mongoose.Schema(
   {
     title: {
@@ -14,10 +23,7 @@ const PostSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    likes: {
-      type: Number,
-      default: 0,
-    },
+    likes: LikesSchema,
   },
 
   { timestamps: true }
