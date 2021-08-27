@@ -12,9 +12,11 @@ export const likeAPost = asyncHandler(async (req, res) => {
   }
 
   const post = await Post.findById(id);
+
   if (post) {
     let { likersArray, likesCount } = post.likes;
-    if (likes.includes(user)) {
+
+    if (likersArray.includes(user)) {
       res.status(500);
       throw new Error(`${user} already liked this post`);
     } else {
@@ -23,6 +25,9 @@ export const likeAPost = asyncHandler(async (req, res) => {
       const updatedPost = await post.save();
       res.send({ updatedPost, success: true });
     }
+  } else {
+    res.status(500);
+    throw new Error('something went wrong, couldnt fetch post by id');
   }
 });
 
@@ -38,10 +43,20 @@ export const unlikeAPost = asyncHandler(async (req, res) => {
   const post = await Post.findById(id);
   if (post) {
     let { likersArray, likesCount } = post.likes;
-
-    post.likes.likersArray = likersArray.filter((like) => like !== user);
-    post.likes.likesCount = likesCount - 1;
-    const updatedPost = await post.save();
-    res.send({ updatedPost, success: true });
+    if (likersArray.includes(user)) {
+      post.likes.likersArray = likersArray.filter((like) => like !== user);
+      post.likes.likesCount = likesCount - 1;
+      const updatedPost = await post.save();
+      res.send({ updatedPost, success: true });
+    } else {
+      res.send({
+        success: false,
+        message: `user ${user} didnt like this post, hence he cannot unlike it`,
+        post,
+      });
+    }
+  } else {
+    res.status(500);
+    throw new Error('something went wrong, couldnt fetch post by id');
   }
 });
