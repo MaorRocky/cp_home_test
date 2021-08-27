@@ -20,4 +20,5 @@ initRouters(app);
 
 app.listen(PORT, (req, res) => {
   console.log(`Listening on port ${PORT}`);
+  console.log("Please read the readme and look at the examples at the bottom")
 });

@@ -1,4 +1,4 @@
-# Check Point assignment - Maor Rocky
+# CP
 
 ## MongoDB schemas:
 
@@ -123,3 +123,37 @@ I deiced to choose node as the programming language since this assignment is ver
 The docker file creates a simple image for the node app.
 
 The docker-compose creates an image from the context of the dockerfile, along with a container for the mongoDB connection. MongoDB is a dependency of the Node API.
+
+## Some examples:
+
+How to create a post :
+
+POST: [http://localhost:3000/posts/](http://localhost:3000/posts/like/6128f960e859130552d7c9f2)
+
+req.body = {
+
+"title": "dummy post",
+
+"text": "this is an example",
+
+"name": "Maor Rocky"
+
+}
+
+How to get all posts:
+
+GET: [http://localhost:3000/posts/](http://localhost:3000/posts/)
+
+How to like a post :
+
+PATCH: [http://localhost:3000/posts](http://localhost:3000/posts)
+
+req.body = { "user" "maor"}
+
+How to unlike a post :
+
+PATCH: [http://localhost:3000/posts/unlike/6128f960e859130552d7c9f2](http://localhost:3000/posts/like/6128f960e859130552d7c9f2)
+
+(id: [/6128f960e859130552d7c9f2](http://localhost:3000/posts/like/6128f960e859130552d7c9f2))
+
+req.body = { "user" "maor"}
