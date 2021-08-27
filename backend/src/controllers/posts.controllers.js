@@ -2,19 +2,20 @@ import Post from '../models/post.models.js';
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 
+const maxLimit = 10;
+
 export const createPost = asyncHandler(async (req, res) => {
   if (!req.body) {
     res.status(401);
     throw new Error('Invalid body');
   }
 
-  const { title, text, name } = req.body;
-  const likes = { likersArray: [], likesCount: 0 };
+  const { title, text, author } = req.body;
+
   const post = await Post.create({
     title,
     text,
-    name,
-    likes,
+    author,
   });
 
   if (post) {
@@ -25,8 +26,16 @@ export const createPost = asyncHandler(async (req, res) => {
   }
 });
 
-export const getAllPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({});
+export const getPosts = asyncHandler(async (req, res) => {
+  let { page, limit } = req.query;
+  page = parseInt(page);
+  limit = Math.min(parseInt(limit), maxLimit);
+
+  const posts = await Post.find({})
+    .limit(limit)
+    .skip(limit * page)
+    .sort({ createdAt: 'desc' });
+
   res.send({ posts, success: true });
 });
 
@@ -89,14 +98,14 @@ export const updatePostByID = asyncHandler(async (req, res) => {
 });
 
 export const getTrendingPosts = asyncHandler(async (req, res) => {
-  let posts = await Post.find({});
-  posts.sort((a, b) => {
-    if (a.likes.likesCount === b.likes.likesCount) {
-      return b.createdAt - a.createdAt;
-    }
+  let { page, limit } = req.query;
+  page = parseInt(page);
+  limit = Math.min(parseInt(limit), maxLimit);
 
-    return b.likes.likesCount - a.likes.likesCount;
-  });
+  let posts = await Post.find({})
+    .sort({ likesCount: -1, createdAt: -1 })
+    .limit(limit)
+    .skip(limit * page);
 
   res.send({ posts, success: true });
 });

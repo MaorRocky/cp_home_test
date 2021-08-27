@@ -1,14 +1,5 @@
 import mongoose from 'mongoose';
 
-const LikesSchema = mongoose.Schema({
-  likersArray: {
-    type: [String],
-  },
-  likesCount: {
-    type: Number,
-  },
-});
-
 const PostSchema = mongoose.Schema(
   {
     title: {
@@ -20,14 +11,20 @@ const PostSchema = mongoose.Schema(
     text: {
       type: String,
       required: true,
-      maxLength: [500, 'minLength of title is 30'],
+      maxLength: [500, 'max of title is 500'],
     },
-    name: {
+    author: {
       type: String,
       required: true,
-      
     },
-    likes: LikesSchema,
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
+    userIdArray: {
+      type: [String],
+      default: [],
+    },
   },
 
   { timestamps: true }

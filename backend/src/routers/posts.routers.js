@@ -1,7 +1,7 @@
 import express from 'express';
 import {
   createPost,
-  getAllPosts,
+  getPosts,
   getPostByID,
   deletePostByID,
   updatePostByID,
@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/posts', getAllPosts);
+router.get('/posts', getPosts);
 router.get('/posts/trendings', getTrendingPosts);
 router.get('/posts/:id', getPostByID);
 router.post('/posts', createPost);
