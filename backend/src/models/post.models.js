@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const PostSchema = mongoose.Schema(
   {
@@ -11,7 +12,7 @@ const PostSchema = mongoose.Schema(
     text: {
       type: String,
       required: true,
-      maxLength: [500, 'max of title is 500'],
+      maxLength: [500, 'max of text is 500'],
     },
     author: {
       type: String,
@@ -29,5 +30,8 @@ const PostSchema = mongoose.Schema(
 
   { timestamps: true }
 );
+
+PostSchema.index({ likesCount: -1, createdAt: -1 });
+PostSchema.plugin(mongoosePaginate);
 
 export default mongoose.model('Post', PostSchema);

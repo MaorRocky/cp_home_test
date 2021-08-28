@@ -10,6 +10,10 @@ export const likeAPost = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error('Invalid id');
   }
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid user id');
+  }
 
   const post = await Post.findById(id);
 
@@ -33,9 +37,14 @@ export const unlikeAPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { user } = req.query;
   const isIdValid = mongoose.Types.ObjectId.isValid(id);
+  
   if (!isIdValid) {
     res.status(400);
     throw new Error('Invalid id');
+  }
+  if (!user) {
+    res.status(400);
+    throw new Error('Invalid user id');
   }
 
   const post = await Post.findById(id);

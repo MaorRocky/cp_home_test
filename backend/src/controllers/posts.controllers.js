@@ -28,15 +28,20 @@ export const createPost = asyncHandler(async (req, res) => {
 
 export const getPosts = asyncHandler(async (req, res) => {
   let { page, limit } = req.query;
-  page = parseInt(page);
-  limit = Math.min(parseInt(limit), maxLimit);
+  page = parseInt(page) || 0;
+  limit = parseInt(limit) || maxLimit;
+  limit = Math.min(limit, maxLimit);
 
   const posts = await Post.find({})
     .limit(limit)
     .skip(limit * page)
     .sort({ createdAt: 'desc' });
-
-  res.send({ posts, success: true });
+  if (posts) {
+    res.send({ posts, success: true });
+  } else {
+    res.status(500);
+    throw new Error('Invalid get posts request');
+  }
 });
 
 export const getPostByID = asyncHandler(async (req, res) => {
@@ -99,13 +104,45 @@ export const updatePostByID = asyncHandler(async (req, res) => {
 
 export const getTrendingPosts = asyncHandler(async (req, res) => {
   let { page, limit } = req.query;
-  page = parseInt(page);
-  limit = Math.min(parseInt(limit), maxLimit);
+  page = parseInt(page) || 0;
+  limit = parseInt(limit) || maxLimit;
+  limit = Math.min(limit, maxLimit);
 
   let posts = await Post.find({})
     .sort({ likesCount: -1, createdAt: -1 })
     .limit(limit)
     .skip(limit * page);
+  if (posts) {
+    res.send({ posts, success: true });
+  } else {
+    res.status(500);
+    throw new Error('Trending posts were not fetched');
+  }
+});
 
-  res.send({ posts, success: true });
+export const getTrendingPostsByAuthor = asyncHandler(async (req, res) => {
+  const { author } = req.params;
+
+  if (!author) {
+    res.status(400);
+    throw new Error('Invalid author');
+  }
+  let { page, limit } = req.query;
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || maxLimit;
+  limit = Math.min(limit, maxLimit);
+
+  const options = {
+    page,
+    limit,
+    sort: { likesCount: -1, createdAt: -1 },
+  };
+
+  let posts = await Post.paginate({}, options);
+  if (posts) {
+    res.send({ posts, success: true });
+  } else {
+    res.status(500);
+    throw new Error('Trending posts were not fetched');
+  }
 });
