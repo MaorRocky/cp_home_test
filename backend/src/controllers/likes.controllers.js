@@ -1,15 +1,10 @@
-import mongoose from 'mongoose';
 import asyncHandler from 'express-async-handler';
 import Post from '../models/post.models.js';
 
 export const likeAPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { user } = req.query;
-  const isIdValid = mongoose.Types.ObjectId.isValid(id);
-  if (!isIdValid) {
-    res.status(400);
-    throw new Error('Invalid id');
-  }
+
   if (!user) {
     res.status(400);
     throw new Error('Invalid user id');
@@ -36,12 +31,7 @@ export const likeAPost = asyncHandler(async (req, res) => {
 export const unlikeAPost = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { user } = req.query;
-  const isIdValid = mongoose.Types.ObjectId.isValid(id);
-  
-  if (!isIdValid) {
-    res.status(400);
-    throw new Error('Invalid id');
-  }
+
   if (!user) {
     res.status(400);
     throw new Error('Invalid user id');
@@ -55,11 +45,10 @@ export const unlikeAPost = asyncHandler(async (req, res) => {
       const updatedPost = await post.save();
       res.send({ updatedPost, success: true });
     } else {
-      res.send({
-        success: false,
-        message: `user ${user} didnt like this post, hence he cannot unlike it`,
-        post,
-      });
+      res.status(500);
+      throw new Error(
+        `user ${user} didnt like this post, hence he cannot unlike it`
+      );
     }
   } else {
     res.status(500);

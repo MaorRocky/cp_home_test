@@ -72,9 +72,17 @@ export const updatePostByID = asyncHandler(async (req, res) => {
 
   const post = await Post.findById(id);
   const { title, text } = req.body;
+
   if (post) {
     post.title = title || post.title;
     post.text = text || post.text;
+
+    if (post.title.length < 3 || post.title.length > 30) {
+      throw new Error('invalid title');
+    }
+    if (post.text.length > 500) {
+      throw new Error('invalid text');
+    }
 
     const updatedPost = await post.save();
 
