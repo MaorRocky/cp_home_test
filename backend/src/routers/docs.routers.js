@@ -1,5 +1,5 @@
 import express from 'express';
-import { docs } from '../controllers/hello.controllers.js';
+import { docs } from '../controllers/docs.controllers.js';
 const router = express.Router();
 
 router.get('/', docs);
