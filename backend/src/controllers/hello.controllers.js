@@ -1,6 +1,6 @@
-export const hello = (req, res) => {
+export const docs = (req, res) => {
 
-    res.send('Hi, please read the README.md file to understand the assignment better');
+    res.redirect('https://github.com/MaorRocky/cp_home_test/blob/main/README.md');
 
 };
 

@@ -1,6 +1,6 @@
 import likesRouter from './likes.routers.js';
 import postRouter from './posts.routers.js';
-import helloRouter from './hello.routers.js';
+import docsRouter from './docs.routers.js';
 import healthCheckRouter from './healthCheck.routers.js';
 
 import express from 'express';
@@ -11,7 +11,7 @@ function initRouters(app) {
   app.use(express.json());
   app.use(likesRouter);
   app.use(postRouter);
-  app.use(helloRouter);
+  app.use(docsRouter);
   app.use(healthCheckRouter);
   app.use(notFound);
   app.use(errorHandler);

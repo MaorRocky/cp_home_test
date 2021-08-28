@@ -1,7 +1,7 @@
 import express from 'express';
-import { hello } from '../controllers/hello.controllers.js';
+import { docs } from '../controllers/hello.controllers.js';
 const router = express.Router();
 
-router.get('/', hello);
+router.get('/', docs);
 
 export default router;

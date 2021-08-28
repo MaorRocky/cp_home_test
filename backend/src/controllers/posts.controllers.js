@@ -104,14 +104,17 @@ export const updatePostByID = asyncHandler(async (req, res) => {
 
 export const getTrendingPosts = asyncHandler(async (req, res) => {
   let { page, limit } = req.query;
-  page = parseInt(page) || 0;
+  page = parseInt(page) || 1;
   limit = parseInt(limit) || maxLimit;
   limit = Math.min(limit, maxLimit);
 
-  let posts = await Post.find({})
-    .sort({ likesCount: -1, createdAt: -1 })
-    .limit(limit)
-    .skip(limit * page);
+  const options = {
+    page,
+    limit,
+    sort: { likesCount: -1, createdAt: -1 },
+  };
+
+  let posts = await Post.paginate({}, options);
   if (posts) {
     res.send({ posts, success: true });
   } else {
@@ -138,7 +141,7 @@ export const getTrendingPostsByAuthor = asyncHandler(async (req, res) => {
     sort: { likesCount: -1, createdAt: -1 },
   };
 
-  let posts = await Post.paginate({}, options);
+  let posts = await Post.paginate({ author: author }, options);
   if (posts) {
     res.send({ posts, success: true });
   } else {
