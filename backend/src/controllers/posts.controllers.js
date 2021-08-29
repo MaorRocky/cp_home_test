@@ -78,7 +78,7 @@ export const updatePostByID = asyncHandler(async (req, res) => {
     post.text = text || post.text;
 
     if (post.title.length < 3 || post.title.length > 30) {
-      throw new Error('invalid title');
+      throw new Error('invalid title, min length is 3, max length is 30');
     }
     if (post.text.length > 500) {
       throw new Error('invalid text');

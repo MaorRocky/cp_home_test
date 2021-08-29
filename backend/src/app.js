@@ -7,18 +7,31 @@ const MONGO_PORT = process.env.MONGO_PORT || 27017;
 const MONGO_URL = process.env.MONGO_URL;
 const MONGODB = `mongodb://${MONGO_URL}:${MONGO_PORT}`;
 
-mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error'));
+async function main() {
+  try {
+    await mongoose.connect(MONGODB, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error'));
 
-const PORT = process.env.PORT || 3000;
-const app = express();
+    const PORT = process.env.PORT || 3000;
+    const app = express();
 
-app.use(cors());
+    app.use(cors());
 
-initRouters(app);
+    initRouters(app);
 
-app.listen(PORT, (req, res) => {
-  console.log(`Listening on port ${PORT}`);
-  console.log("Please read the readme and look at the examples at the bottom")
-});
+    app.listen(PORT, (req, res) => {
+      console.log(`Listening on port ${PORT}`);
+      console.log(
+        'Please read the readme and look at the examples at the bottom'
+      );
+    });
+  } catch (error) {
+    console.log('Failed to connect to MongoDB', err);
+  }
+}
+
+main();
