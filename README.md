@@ -1,5 +1,12 @@
 # Check Point assignment - Maor Rocky
 
+How to run?
+
+- clone the project from GitHub - [https://github.com/MaorRocky/cp_home_test](https://github.com/MaorRocky/cp_home_test)
+- run in the terminal:
+
+> docker-compose up --build
+
 # Tech stack used:
 
 1. Node.js
